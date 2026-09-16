@@ -161,3 +161,49 @@ test('renders informational sections without JavaScript', async ({ baseURL, brow
     await context.close();
   }
 });
+
+test('keeps page blocks in the PRD order', async ({ baseURL, browser }) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  try {
+    await page.goto('/');
+
+    const blocks = page.locator('body > main > *');
+    const expectedBlocks = [
+      'header',
+      'hero',
+      'directions',
+      'services',
+      'chess-program',
+      'about',
+      'audience',
+      'format',
+      'professionals',
+      'testimonials',
+      'faq',
+      'contacts',
+      'final-cta',
+      'footer',
+    ];
+
+    await expect(blocks).toHaveCount(expectedBlocks.length);
+    for (const [index, block] of expectedBlocks.entries()) {
+      await expect(blocks.nth(index)).toHaveAttribute('data-page-block', block);
+    }
+
+    for (const heading of [
+      'Направления и услуги',
+      'Услуги активного направления',
+      'Специалисты и квалификация',
+      'Отзывы',
+      'Частые вопросы',
+      'Контакты',
+      'Записаться на встречу',
+    ]) {
+      await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible();
+    }
+  } finally {
+    await context.close();
+  }
+});

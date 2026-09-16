@@ -11,9 +11,53 @@ import MeetingFormat from '../components/MeetingFormat.astro';
   title="Прекрасная жизнь — центр психологии и речи в Минске"
   description="Очные психологические консультации, развитие речи, шахматные занятия для подростков и практики с поющими чашами в Минске"
 >
+  <header data-page-block="header" aria-label="Шапка сайта">
+    <p>Прекрасная жизнь</p>
+  </header>
+
   <Hero />
+
+  <section id="directions" data-page-block="directions" aria-labelledby="directions-title">
+    <h2 id="directions-title">Направления и услуги</h2>
+    <p>Выберите направление, чтобы увидеть доступные услуги.</p>
+  </section>
+
+  <section data-page-block="services" aria-labelledby="services-title">
+    <h2 id="services-title">Услуги активного направления</h2>
+    <p>Список услуг будет доступен после выбора направления.</p>
+  </section>
+
+  <ChessProgram />
   <About />
   <Audience />
   <MeetingFormat />
-  <ChessProgram />
+
+  <section id="professionals" data-page-block="professionals" aria-labelledby="professionals-title">
+    <h2 id="professionals-title">Специалисты и квалификация</h2>
+    <p>Информация о специалистах готовится к публикации.</p>
+  </section>
+
+  <section id="testimonials" data-page-block="testimonials" aria-labelledby="testimonials-title">
+    <h2 id="testimonials-title">Отзывы</h2>
+    <p>Отзывы готовятся к публикации после согласования.</p>
+  </section>
+
+  <section id="faq" data-page-block="faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Частые вопросы</h2>
+    <p>Ответы на частые вопросы будут добавлены в этот раздел.</p>
+  </section>
+
+  <section id="contacts" data-page-block="contacts" aria-labelledby="contacts-title">
+    <h2 id="contacts-title">Контакты</h2>
+    <p>Контактная информация будет добавлена в этот раздел.</p>
+  </section>
+
+  <section data-page-block="final-cta" aria-labelledby="final-cta-title">
+    <h2 id="final-cta-title">Записаться на встречу</h2>
+    <p>Свяжитесь с центром, чтобы обсудить подходящее направление.</p>
+  </section>
+
+  <footer data-page-block="footer" aria-label="Подвал">
+    <p>Прекрасная жизнь</p>
+  </footer>
 </BaseLayout>
