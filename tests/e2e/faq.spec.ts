@@ -60,7 +60,7 @@ test.describe('FAQ disclosures', () => {
     const trigger = page.getByRole('button', { name: questions[2], exact: true });
     const answer = page.locator(`#${await trigger.getAttribute('aria-controls')}`);
 
-    await trigger.evaluate((button) => button.click());
+    await trigger.evaluate((button) => (button as HTMLElement).click());
 
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect(answer).toBeVisible();

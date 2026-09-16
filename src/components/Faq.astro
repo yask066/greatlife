@@ -1,0 +1,73 @@
+---
+import { faqItems } from '../content/faq';
+---
+
+<section id="faq" data-page-block="faq" data-faq aria-labelledby="faq-title">
+  <h2 id="faq-title">Частые вопросы</h2>
+
+  <div class="faq-list">
+    {
+      faqItems.map((item) => {
+        const triggerId = `faq-trigger-${item.id}`;
+        const answerId = `faq-answer-${item.id}`;
+
+        return (
+          <article class="faq-item">
+            <h3>
+              <button
+                type="button"
+                id={triggerId}
+                data-faq-trigger
+                aria-controls={answerId}
+                aria-expanded="true"
+              >
+                {item.question}
+              </button>
+            </h3>
+            <div id={answerId} data-faq-answer aria-labelledby={triggerId}>
+              <p>{item.answer}</p>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+
+  <style>
+    [data-faq][data-enhanced='true'] [data-faq-answer][hidden] {
+      display: none;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .faq-item {
+      padding: var(--space-3);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+    }
+
+    .faq-item h3 {
+      margin: 0;
+    }
+
+    .faq-item button {
+      width: 100%;
+      padding: var(--space-2) 0;
+      color: inherit;
+      font: inherit;
+      font-weight: 700;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .faq-item p {
+      margin: var(--space-2) 0 0;
+    }
+  </style>
+</section>

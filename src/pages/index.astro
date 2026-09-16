@@ -4,6 +4,7 @@ import About from '../components/About.astro';
 import Audience from '../components/Audience.astro';
 import ChessProgram from '../components/ChessProgram.astro';
 import Directions from '../components/Directions.astro';
+import Faq from '../components/Faq.astro';
 import Hero from '../components/Hero.astro';
 import MeetingFormat from '../components/MeetingFormat.astro';
 import Header from '../components/Header.astro';
@@ -34,10 +35,7 @@ import Header from '../components/Header.astro';
     <p>Отзывы готовятся к публикации после согласования.</p>
   </section>
 
-  <section id="faq" data-page-block="faq" aria-labelledby="faq-title">
-    <h2 id="faq-title">Частые вопросы</h2>
-    <p>Ответы на частые вопросы будут добавлены в этот раздел.</p>
-  </section>
+  <Faq />
 
   <section id="contacts" data-page-block="contacts" aria-labelledby="contacts-title">
     <h2 id="contacts-title">Контакты</h2>
