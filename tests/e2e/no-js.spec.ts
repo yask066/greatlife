@@ -101,6 +101,23 @@ test('renders the complete chess program without JavaScript', async ({ baseURL, 
     await expect(chessProgram).toContainText(
       'Шахматная группа — это небольшой безопасный социум. Здесь подростки учатся взаимодействовать, соблюдать общие правила, уважать соперника, справляться с проигрышем и замечать, как их решения влияют на результат.',
     );
+    expect(await chessProgram.innerText()).not.toMatch(/(?:профилактик|лечени|заболеван)/iu);
+  } finally {
+    await context.close();
+  }
+});
+
+test('links the chess service card to its expanded program', async ({ baseURL, browser }) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  try {
+    await page.goto('/');
+
+    const chessLink = page.locator('a[href="#chess-program"]');
+    await expect(chessLink).toHaveCount(1);
+    await expect(chessLink).toHaveText('Шахматы и мышление');
+    await expect(page.locator('#chess-program')).toBeVisible();
   } finally {
     await context.close();
   }
