@@ -37,6 +37,8 @@ const informationalSections = [
   'Как проходят встречи',
 ];
 
+const namedMethodClaims = ['КПТ', 'арт-терапия'];
+
 test('keeps all key content visible when JavaScript is disabled', async ({
   baseURL,
   browser,
@@ -68,6 +70,62 @@ test('keeps all key content visible when JavaScript is disabled', async ({
         page.getByRole('heading', { name: sectionName, exact: true }),
         `Missing no-JS section heading: ${sectionName}`,
       ).toBeVisible();
+    }
+  } finally {
+    await context.close();
+  }
+});
+
+test('renders informational sections without JavaScript', async ({ baseURL, browser }) => {
+  const context = await browser.newContext({
+    baseURL,
+    javaScriptEnabled: false,
+  });
+  const page = await context.newPage();
+
+  try {
+    await page.goto('/');
+
+    const about = page.locator('#about');
+    const audience = page.locator('#audience');
+    const format = page.locator('#format');
+
+    await expect(about).toBeVisible();
+    await expect(audience).toBeVisible();
+    await expect(format).toBeVisible();
+
+    await expect(about.getByRole('heading', { level: 2, name: 'О центре', exact: true })).toBeVisible();
+    await expect(
+      audience.getByRole('heading', { level: 2, name: 'Кому подходят занятия', exact: true }),
+    ).toBeVisible();
+    await expect(
+      format.getByRole('heading', { level: 2, name: 'Как проходят встречи', exact: true }),
+    ).toBeVisible();
+
+    for (const audienceGroup of ['Подросткам', 'Родителям', 'Взрослым']) {
+      await expect(
+        audience.getByRole('heading', { level: 3, name: audienceGroup, exact: true }),
+      ).toBeVisible();
+    }
+
+    await expect(format).toContainText('Очные встречи в Минске');
+    await expect(format).toContainText('индивидуальный');
+    await expect(format).toContainText('групповой');
+
+    const informationalText = await page.locator('#about, #audience, #format').allInnerTexts();
+    const renderedText = informationalText.join(' ');
+
+    expect(renderedText).not.toMatch(/(?:цена|стоимость|\d+\s*(?:руб\.?|byn|р\.))/i);
+    expect(renderedText).not.toMatch(
+      /(?<![\p{L}\p{N}])(?:\d+\s*)?(?:минут(?:а|ы)?|час(?:а|ов)?)(?![\p{L}\p{N}])/iu,
+    );
+    expect(renderedText).not.toMatch(
+      /(?<![\p{L}\p{N}])(?:ул\.?|улица|проспект|пр-т|дом)(?![\p{L}\p{N}])/iu,
+    );
+    expect(renderedText).not.toMatch(/(?:метод|методика|методики)/i);
+
+    for (const namedMethodClaim of namedMethodClaims) {
+      expect(renderedText).not.toContain(namedMethodClaim);
     }
   } finally {
     await context.close();
