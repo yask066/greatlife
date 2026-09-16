@@ -25,20 +25,23 @@ test.describe('site navigation', () => {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto('/');
 
-    const menuButton = page.getByRole('button', { name: 'Открыть меню' });
+    const menuButton = page.locator('[data-menu-trigger]');
     const navigation = page.locator('#primary-navigation');
 
+    await expect(menuButton).toHaveAccessibleName('Открыть меню');
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
     await expect(navigation).toBeHidden();
 
     await menuButton.focus();
     await page.keyboard.press('Enter');
     await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+    await expect(menuButton).toHaveAccessibleName('Закрыть меню');
     await expect(page.getByRole('button', { name: 'Закрыть меню' })).toBeFocused();
     await expect(navigation).toBeVisible();
 
     await page.keyboard.press('Escape');
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+    await expect(menuButton).toHaveAccessibleName('Открыть меню');
     await expect(navigation).toBeHidden();
     await expect(menuButton).toBeFocused();
 
@@ -51,7 +54,7 @@ test.describe('site navigation', () => {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto('/');
 
-    const menuButton = page.getByRole('button', { name: 'Открыть меню' });
+    const menuButton = page.locator('[data-menu-trigger]');
     const navigation = page.locator('#primary-navigation');
 
     await expect(navigation.locator('a')).toHaveCount(navigationLinks.length);
