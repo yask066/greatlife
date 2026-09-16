@@ -1,0 +1,154 @@
+---
+import { contacts } from '../content/contacts';
+
+const navigationLinks = [
+  { label: 'Направления', href: '#directions' },
+  { label: 'О центре', href: '#about' },
+  { label: 'Специалисты', href: '#professionals' },
+  { label: 'Отзывы', href: '#testimonials' },
+  { label: 'Вопросы', href: '#faq' },
+  { label: 'Контакты', href: '#contacts' },
+] as const;
+---
+
+<header class="site-header" data-page-block="header" data-mobile-menu aria-label="Шапка сайта">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="Прекрасная жизнь — на главную">
+      Прекрасная жизнь
+    </a>
+
+    <button
+      class="site-header__menu-button"
+      type="button"
+      data-menu-trigger
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label="Открыть меню"
+    >
+      Меню
+    </button>
+
+    <nav id="primary-navigation" class="site-header__navigation" aria-label="Основная навигация">
+      <ul>
+        {
+          navigationLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="button site-header__contact" href={contacts.phoneHref}>Связаться</a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-surface);
+    border-block-end: 1px solid var(--color-sage);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: var(--container-max);
+    min-block-size: 4rem;
+    margin-inline: auto;
+    padding-inline: var(--container-gutter);
+  }
+
+  .site-header__brand {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .site-header__navigation {
+    margin-inline: auto;
+  }
+
+  .site-header__navigation ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-header__navigation a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .site-header__navigation a:hover,
+  .site-header__navigation a:focus-visible {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .site-header__contact {
+    flex: 0 0 auto;
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+    color: var(--color-surface);
+    text-decoration: none;
+  }
+
+  .site-header__menu-button {
+    display: none;
+    min-block-size: 2.75rem;
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-primary);
+    font: inherit;
+  }
+
+  @media (max-width: 47.999rem) {
+    .site-header__inner {
+      flex-wrap: wrap;
+      padding-block: var(--space-2);
+    }
+
+    .site-header__menu-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline-start: auto;
+    }
+
+    .site-header__navigation {
+      display: none;
+      flex-basis: 100%;
+      order: 3;
+      margin: 0;
+    }
+
+    .site-header__navigation ul {
+      display: grid;
+      gap: 0;
+    }
+
+    .site-header__navigation a {
+      border-block-start: 1px solid var(--color-sage);
+    }
+
+    .site-header__contact {
+      display: none;
+    }
+  }
+</style>
