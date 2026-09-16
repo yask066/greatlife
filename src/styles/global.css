@@ -38,6 +38,8 @@
   --font-size-heading-lg: clamp(2rem, 6vw, 3rem);
   --line-height-body: 1.5;
   --line-height-heading: 1.2;
+
+  --anchor-offset: 4rem;
 }
 
 html {
@@ -69,17 +71,60 @@ canvas {
   height: auto;
 }
 
+:focus-visible {
+  outline: 0.1875rem solid var(--color-text);
+  outline-offset: 0.1875rem;
+}
+
+:where(
+  button,
+  input[type='button'],
+  input[type='reset'],
+  input[type='submit'],
+  [role='button'],
+  .button
+) {
+  min-block-size: 2.75rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:where(main[id], section[id]) {
+  scroll-margin-top: var(--anchor-offset);
+}
+
 .skip-link {
   position: absolute;
   top: 0;
   left: -9999px;
   z-index: 1000;
   padding: 0.75rem 1rem;
-  background: #fff;
-  color: #17334a;
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: 700;
 }
 
 .skip-link:focus-visible {
   top: 1rem;
   left: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
 }

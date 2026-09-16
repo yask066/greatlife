@@ -153,3 +153,97 @@ test('renders the approved local typography and visual foundation without extern
   expect((await font.body()).subarray(0, 4).toString('ascii')).toBe('wOF2');
   expect(externalFontRequests).toEqual([]);
 });
+
+test.describe('global accessibility foundation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('shows a strong focus indicator for keyboard navigation', async ({ page }) => {
+    await page.locator('body').evaluate((body) => {
+      const button = document.createElement('button');
+      button.textContent = 'Проверить фокус';
+      body.append(button);
+    });
+
+    const button = page.getByRole('button', { name: 'Проверить фокус' });
+    await button.focus();
+
+    const focusIndicator = await button.evaluate((element) => {
+      const style = getComputedStyle(element);
+
+      return {
+        color: style.outlineColor,
+        focusVisible: element.matches(':focus-visible'),
+        offset: Number.parseFloat(style.outlineOffset),
+        style: style.outlineStyle,
+        width: Number.parseFloat(style.outlineWidth),
+      };
+    });
+
+    expect(focusIndicator).toEqual({
+      color: 'rgb(23, 51, 74)',
+      focusVisible: true,
+      offset: 3,
+      style: 'solid',
+      width: 3,
+    });
+  });
+
+  test('keeps primary actions at least 44 pixels tall', async ({ page }) => {
+    await page.locator('body').evaluate((body) => {
+      const link = document.createElement('a');
+      link.className = 'button';
+      link.href = '#main-content';
+      link.textContent = 'Основное действие';
+
+      const button = document.createElement('button');
+      button.textContent = 'Кнопка';
+
+      body.append(link, button);
+    });
+
+    const heights = await page.locator('.button, button').evaluateAll((elements) =>
+      elements.map((element) => element.getBoundingClientRect().height),
+    );
+
+    expect(heights).toHaveLength(2);
+    expect(heights.every((height) => height >= 44)).toBe(true);
+  });
+
+  test('offsets anchored sections from sticky page controls', async ({ page }) => {
+    await page.locator('main').evaluate((main) => {
+      const section = document.createElement('section');
+      section.id = 'anchor-probe';
+      main.append(section);
+    });
+
+    const scrollMarginTop = await page
+      .locator('#anchor-probe')
+      .evaluate((element) => Number.parseFloat(getComputedStyle(element).scrollMarginTop));
+
+    expect(scrollMarginTop).toBeGreaterThanOrEqual(64);
+  });
+
+  test('removes optional motion when reduced motion is requested', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.locator('body').evaluate((body) => {
+      const probe = document.createElement('div');
+      probe.style.animationDuration = '2s';
+      probe.style.transitionDuration = '2s';
+      body.append(probe);
+    });
+
+    const durations = await page.locator('body > div').evaluate((element) => {
+      const style = getComputedStyle(element);
+
+      return {
+        animation: Number.parseFloat(style.animationDuration),
+        transition: Number.parseFloat(style.transitionDuration),
+      };
+    });
+
+    expect(durations.animation).toBeLessThanOrEqual(0.01);
+    expect(durations.transition).toBeLessThanOrEqual(0.01);
+  });
+});
