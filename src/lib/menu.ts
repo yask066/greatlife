@@ -56,7 +56,7 @@ export const initMenu = (root: HTMLElement): (() => void) => {
   const handleLinkClick = () => {
     closeMenu();
     if (!mediaQuery.matches) {
-      window.setTimeout(() => trigger.focus(), 0);
+      window.setTimeout(() => trigger.focus(), 50);
     }
   };
 
