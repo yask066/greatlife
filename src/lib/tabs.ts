@@ -29,6 +29,11 @@ export function initTabs(root: HTMLElement): () => void {
       const isSelected = tab.id === `tab-${selectedId}`;
       tab.setAttribute('aria-selected', String(isSelected));
       tab.tabIndex = isSelected ? 0 : -1;
+      const stateMarker = tab.querySelector<HTMLElement>('[data-tab-state]');
+      if (stateMarker) {
+        stateMarker.hidden = !isSelected;
+        stateMarker.dataset.tabState = isSelected ? 'active' : 'inactive';
+      }
     });
 
     panels.forEach((panel) => {
