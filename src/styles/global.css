@@ -1,3 +1,45 @@
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/manrope-latin-cyrillic.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --color-primary: #1f5c50;
+  --color-accent: #2b6d64;
+  --color-sage: #dce9e4;
+  --color-background: #f4f8f6;
+  --color-text: #17334a;
+  --color-surface: #ffffff;
+
+  --container-max: 75rem;
+  --container-gutter: clamp(1rem, 4vw, 2rem);
+
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 0.25rem 0.75rem rgb(23, 51, 74, 0.08);
+  --shadow-elevated: 0 0.75rem 1.5rem rgb(23, 51, 74, 0.12);
+
+  --font-size-body: 1rem;
+  --font-size-heading-sm: clamp(1.25rem, 3vw, 1.5rem);
+  --font-size-heading-md: clamp(1.5rem, 4vw, 2rem);
+  --font-size-heading-lg: clamp(2rem, 6vw, 3rem);
+  --line-height-body: 1.5;
+  --line-height-heading: 1.2;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -11,6 +53,11 @@ html {
 body {
   margin: 0;
   overflow-wrap: break-word;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: Manrope, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
 }
 
 img,

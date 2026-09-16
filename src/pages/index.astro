@@ -1,19 +1,11 @@
 ---
-import "../styles/global.css";
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Прекрасная жизнь</title>
-  </head>
-  <body>
-    <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
-    <main id="main-content">
-      <h1>Прекрасная жизнь</h1>
-      <p>Центр психологии и речи в Минске.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title="Прекрасная жизнь — центр психологии и речи в Минске"
+  description="Очные психологические консультации, развитие речи, шахматные занятия для подростков и практики с поющими чашами в Минске"
+>
+  <h1>Прекрасная жизнь</h1>
+  <p>Центр психологии и речи в Минске.</p>
+</BaseLayout>

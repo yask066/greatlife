@@ -1,0 +1,155 @@
+import { expect, test } from '@playwright/test';
+
+const approvedTitle = 'Прекрасная жизнь — центр психологии и речи в Минске';
+const approvedDescription =
+  'Очные психологические консультации, развитие речи, шахматные занятия для подростков и практики с поющими чашами в Минске';
+const metadataTimeout = 1_000;
+
+test.describe('SEO head and document semantics', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('publishes the approved Russian metadata and a single page heading', async ({
+    page,
+  }) => {
+    await expect.soft(page.locator('html')).toHaveAttribute('lang', 'ru');
+    await expect.soft(page.locator('h1')).toHaveCount(1);
+    await expect.soft(page).toHaveTitle(approvedTitle, {
+      timeout: metadataTimeout,
+    });
+    await expect
+      .soft(page.locator('meta[name="description"]'))
+      .toHaveAttribute('content', approvedDescription, {
+        timeout: metadataTimeout,
+      });
+    await expect
+      .soft(page.locator('link[rel="canonical"]'))
+      .toHaveAttribute('href', 'https://example.invalid/', {
+        timeout: metadataTimeout,
+      });
+    await expect
+      .soft(page.locator('meta[property="og:title"]'))
+      .toHaveAttribute('content', approvedTitle, {
+        timeout: metadataTimeout,
+      });
+    await expect
+      .soft(page.locator('meta[property="og:description"]'))
+      .toHaveAttribute('content', approvedDescription, {
+        timeout: metadataTimeout,
+      });
+  });
+
+  test('exposes a focusable skip link to the main content', async ({ page }) => {
+    const skipLink = page.getByRole('link', {
+      name: 'Перейти к основному содержанию',
+    });
+
+    await expect(skipLink).toHaveAttribute('href', '#main-content');
+    await expect(page.locator('#main-content')).toHaveCount(1);
+
+    await skipLink.focus();
+
+    await expect(skipLink).toBeFocused();
+    await expect(skipLink).toBeInViewport();
+  });
+});
+
+test('renders the approved local typography and visual foundation without external fonts', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+
+  const externalFontRequests: string[] = [];
+  const siteOrigin = 'http://127.0.0.1:4321';
+
+  page.on('request', (request) => {
+    const requestUrl = request.url();
+    if (request.resourceType() === 'font' && new URL(requestUrl).origin !== siteOrigin) {
+      externalFontRequests.push(requestUrl);
+    }
+  });
+
+  await page.goto('/');
+
+  const styles = await page.locator('html').evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    const body = getComputedStyle(document.body);
+    const properties = [
+      '--color-primary',
+      '--color-accent',
+      '--color-sage',
+      '--color-background',
+      '--color-text',
+      '--color-surface',
+      '--container-max',
+      '--container-gutter',
+      '--space-1',
+      '--space-2',
+      '--space-3',
+      '--space-4',
+      '--space-5',
+      '--space-6',
+      '--radius-sm',
+      '--radius-md',
+      '--radius-lg',
+      '--radius-pill',
+      '--shadow-card',
+      '--shadow-elevated',
+      '--font-size-body',
+      '--font-size-heading-sm',
+      '--font-size-heading-md',
+      '--font-size-heading-lg',
+    ];
+
+    return {
+      tokens: Object.fromEntries(
+        properties.map((property) => [property, root.getPropertyValue(property).trim()]),
+      ),
+      body: {
+        backgroundColor: body.backgroundColor,
+        color: body.color,
+        fontFamily: body.fontFamily,
+        fontSize: body.fontSize,
+      },
+    };
+  });
+
+  expect(styles.tokens).toMatchObject({
+    '--color-primary': '#1f5c50',
+    '--color-accent': '#2b6d64',
+    '--color-sage': '#dce9e4',
+    '--color-background': '#f4f8f6',
+    '--color-text': '#17334a',
+    '--color-surface': '#fff',
+    '--container-max': '75rem',
+    '--container-gutter': 'clamp(1rem, 4vw, 2rem)',
+    '--space-1': '.5rem',
+    '--space-2': '.75rem',
+    '--space-3': '1rem',
+    '--space-4': '1.5rem',
+    '--space-5': '2rem',
+    '--space-6': '3rem',
+    '--radius-sm': '.5rem',
+    '--radius-md': '1rem',
+    '--radius-lg': '1.5rem',
+    '--radius-pill': '999px',
+    '--font-size-body': '1rem',
+  });
+  expect(styles.tokens['--shadow-card']).toContain('#17334a');
+  expect(styles.tokens['--shadow-elevated']).toContain('#17334a');
+  expect(styles.tokens['--font-size-heading-sm']).not.toBe('');
+  expect(styles.tokens['--font-size-heading-md']).not.toBe('');
+  expect(styles.tokens['--font-size-heading-lg']).not.toBe('');
+  expect(styles.body).toMatchObject({
+    backgroundColor: 'rgb(244, 248, 246)',
+    color: 'rgb(23, 51, 74)',
+  });
+  expect(styles.body.fontFamily).toMatch(/^Manrope[, ]/);
+  expect(Number.parseFloat(styles.body.fontSize)).toBeGreaterThanOrEqual(16);
+
+  const font = await page.request.get('/fonts/manrope-latin-cyrillic.woff2');
+  expect(font.status()).toBe(200);
+  expect((await font.body()).subarray(0, 4).toString('ascii')).toBe('wOF2');
+  expect(externalFontRequests).toEqual([]);
+});
