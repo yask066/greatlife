@@ -31,6 +31,14 @@ const chessGroupContent = [
   'Шахматная группа — это небольшой безопасный социум. Здесь подростки учатся взаимодействовать, соблюдать общие правила, уважать соперника, справляться с проигрышем и замечать, как их решения влияют на результат.',
 ];
 
+const chessSkills = [
+  'Память',
+  'Логическое мышление',
+  'Концентрацию',
+  'Скорость принятия решений',
+  'Когнитивную активность',
+];
+
 const informationalSections = [
   'О центре',
   'Кому подходят занятия',
@@ -71,6 +79,28 @@ test('keeps all key content visible when JavaScript is disabled', async ({
         `Missing no-JS section heading: ${sectionName}`,
       ).toBeVisible();
     }
+  } finally {
+    await context.close();
+  }
+});
+
+test('renders the complete chess program without JavaScript', async ({ baseURL, browser }) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  try {
+    await page.goto('/');
+
+    const chessProgram = page.locator('#chess-program');
+    await expect(chessProgram).toBeVisible();
+
+    for (const skill of chessSkills) {
+      await expect(chessProgram.getByRole('listitem').filter({ hasText: skill })).toBeVisible();
+    }
+
+    await expect(chessProgram).toContainText(
+      'Шахматная группа — это небольшой безопасный социум. Здесь подростки учатся взаимодействовать, соблюдать общие правила, уважать соперника, справляться с проигрышем и замечать, как их решения влияют на результат.',
+    );
   } finally {
     await context.close();
   }
