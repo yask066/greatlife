@@ -1,4 +1,5 @@
 import type { DirectionId } from '../types/content';
+import { queryAll } from './dom';
 
 export const DIRECTION_IDS = ['speech', 'psychology', 'bowls'] as const satisfies readonly DirectionId[];
 
@@ -12,8 +13,8 @@ function directionFromHash(): DirectionId {
 }
 
 export function initTabs(root: HTMLElement): () => void {
-  const tabs = [...root.querySelectorAll<HTMLElement>('[role="tab"]')];
-  const panels = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+  const tabs = queryAll<HTMLElement>(root, '[role="tab"]');
+  const panels = queryAll<HTMLElement>(root, '[role="tabpanel"]');
   const tabById = new Map(tabs.map((tab) => [tab.id.replace(/^tab-/, ''), tab]));
   const panelById = new Map(
     panels.map((panel) => [panel.id.replace(/^panel-/, ''), panel]),

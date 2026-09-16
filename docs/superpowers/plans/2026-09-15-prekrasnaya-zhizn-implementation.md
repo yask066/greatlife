@@ -339,27 +339,27 @@
 - DOM использует `[data-tabs]`, `[role=tab]`, `[role=tabpanel]`, `aria-controls`, `aria-labelledby`, `aria-selected`, `tabindex`.
 - Допустимые hash id определяются единожды как `DIRECTION_IDS: readonly DirectionId[]`.
 
-- [ ] **Шаг 1: написать unit-тесты tab-контракта**
+- [x] **Шаг 1: написать unit-тесты tab-контракта**
 
   Проверить: default — psychology; корректный hash активирует соответствующую панель; неизвестный hash возвращает psychology; клик меняет hash без перезагрузки; ArrowLeft/Right циклически меняют вкладку и фокус; Home/End переходят к первой/последней; Enter и Space активируют сфокусированную вкладку; cleanup снимает listeners.
 
-- [ ] **Шаг 2: запустить unit-тесты и подтвердить падение**
+- [x] **Шаг 2: запустить unit-тесты и подтвердить падение**
 
   Выполнить `npx vitest run tests/unit/tabs.test.ts`. Ожидается FAIL: модуль `src/lib/tabs.ts` отсутствует.
 
-- [ ] **Шаг 3: отрендерить доступный HTML направлений**
+- [x] **Шаг 3: отрендерить доступный HTML направлений**
 
   `Directions.astro` проходит по `directions` и выводит три кнопки вкладок и три панели с карточками. Без атрибута `data-enhanced` все панели видимы последовательно; скрытие неактивных панелей применяется CSS только к `[data-tabs][data-enhanced=true]`.
 
-- [ ] **Шаг 4: реализовать hash routing и клавиатуру**
+- [x] **Шаг 4: реализовать hash routing и клавиатуру**
 
   `initTabs` валидирует hash, синхронизирует `aria-selected`, `tabindex`, `hidden`, URL и фокус. При `hashchange` обновляет UI. Для начального неизвестного hash заменяет его на `#psychology` через `history.replaceState`, не добавляя лишнюю запись истории.
 
-- [ ] **Шаг 5: написать и выполнить e2e-проверки**
+- [x] **Шаг 5: написать и выполнить e2e-проверки**
 
   Проверить мышь, Tab, Enter, Space, стрелки, прямой переход на каждый hash и reload. Проверить, что активная вкладка различается текстом/иконкой состояния, а не только цветом. `npx playwright test tests/e2e/directions.spec.ts` и unit-тест должны завершиться PASS.
 
-- [ ] **Шаг 6: зафиксировать**
+- [x] **Шаг 6: зафиксировать**
 
   ```bash
   git add src/components/Directions.astro src/lib src/scripts tests/unit/tabs.test.ts tests/e2e/directions.spec.ts
