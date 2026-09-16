@@ -1,0 +1,77 @@
+---
+import { directions } from '../content/directions';
+
+const defaultDirectionId = 'psychology';
+---
+
+<section id="directions" data-page-block="directions" data-tabs aria-labelledby="directions-title">
+  <h2 id="directions-title">Направления и услуги</h2>
+  <p>Выберите направление, чтобы увидеть доступные услуги.</p>
+
+  <div class="direction-tabs" role="tablist" aria-label="Направления центра">
+    {
+      directions.map((direction) => {
+        const isDefault = direction.id === defaultDirectionId;
+        const tabId = `tab-${direction.id}`;
+        const panelId = `panel-${direction.id}`;
+
+        return (
+          <button
+            type="button"
+            id={tabId}
+            role="tab"
+            aria-controls={panelId}
+            aria-selected={isDefault ? 'true' : 'false'}
+            tabindex={isDefault ? 0 : -1}
+            data-direction-id={direction.id}
+          >
+            {direction.label}
+            {isDefault && <span aria-hidden="true"> (выбрано)</span>}
+          </button>
+        );
+      })
+    }
+  </div>
+
+  <div class="direction-panels">
+    {
+      directions.map((direction) => (
+        <section
+          id={`panel-${direction.id}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${direction.id}`}
+          data-direction-panel={direction.id}
+        >
+          <h3>{direction.label}</h3>
+          <ul>
+            {direction.services.map((service) => (
+              <li>
+                <article>
+                  <h4>{service.title}</h4>
+                  <p>{service.description}</p>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+
+  <style>
+    [data-tabs][data-enhanced='true'] [role='tabpanel'][hidden] {
+      display: none;
+    }
+
+    .direction-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .direction-tabs button {
+      min-block-size: 2.75rem;
+      padding: 0.625rem 1rem;
+    }
+  </style>
+</section>

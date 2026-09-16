@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import About from '../components/About.astro';
 import Audience from '../components/Audience.astro';
 import ChessProgram from '../components/ChessProgram.astro';
+import Directions from '../components/Directions.astro';
 import Hero from '../components/Hero.astro';
 import MeetingFormat from '../components/MeetingFormat.astro';
 ---
@@ -17,23 +18,7 @@ import MeetingFormat from '../components/MeetingFormat.astro';
 
   <Hero />
 
-  <section id="directions" data-page-block="directions" aria-labelledby="directions-title">
-    <h2 id="directions-title">Направления и услуги</h2>
-    <p>Выберите направление, чтобы увидеть доступные услуги.</p>
-  </section>
-
-  <section data-page-block="services" aria-labelledby="services-title">
-    <h2 id="services-title">Услуги активного направления</h2>
-    <article aria-labelledby="chess-service-title">
-      <h3 id="chess-service-title">
-        <a href="#chess-program">Шахматы и мышление</a>
-      </h3>
-      <p>
-        Групповая программа для развития памяти, логического мышления, внимания, навыков планирования
-        и принятия решений.
-      </p>
-    </article>
-  </section>
+  <Directions />
 
   <ChessProgram />
   <About />
