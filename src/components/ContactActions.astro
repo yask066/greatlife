@@ -1,0 +1,30 @@
+---
+import { contacts } from '../content/contacts';
+
+interface Props {
+  placement: 'header' | 'hero' | 'directions' | 'contacts' | 'final' | 'mobile';
+}
+
+const { placement } = Astro.props;
+---
+
+<div class={`contact-actions contact-actions--${placement}`}>
+  <a
+    id={`contact-phone-${placement}`}
+    class="button button--primary"
+    data-contact-kind="phone"
+    href={contacts.phoneHref}
+  >
+    Позвонить {contacts.phoneDisplay}
+  </a>
+  <a
+    id={`contact-telegram-${placement}`}
+    class="button button--secondary"
+    data-contact-kind="telegram"
+    href={contacts.telegramHref}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Написать в Telegram
+  </a>
+</div>
