@@ -224,3 +224,29 @@ test('keeps page blocks in the PRD order', async ({ baseURL, browser }) => {
     await context.close();
   }
 });
+
+test('renders honest trust placeholders without invented publication data', async ({
+  baseURL,
+  browser,
+}) => {
+  const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  try {
+    await page.goto('/');
+
+    const professionals = page.locator('#professionals');
+    const testimonials = page.locator('#testimonials');
+
+    await expect(professionals).toContainText(
+      'Профили специалистов готовятся к публикации после согласования.',
+    );
+    await expect(testimonials).toContainText(
+      'Отзывы готовятся к публикации после получения разрешений авторов.',
+    );
+    await expect(professionals.locator('[data-professional-card]')).toHaveCount(0);
+    await expect(testimonials.locator('blockquote, [data-testimonial]')).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});

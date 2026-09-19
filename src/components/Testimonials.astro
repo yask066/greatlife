@@ -1,0 +1,29 @@
+---
+import {
+  testimonials,
+  testimonialsEmptyState,
+} from '../content/trust';
+
+const approvedTestimonials = testimonials.filter(
+  (testimonial) => testimonial.approval === 'approved' && testimonial.authorConsent,
+);
+---
+
+<section id="testimonials" data-page-block="testimonials" aria-labelledby="testimonials-title">
+  <h2 id="testimonials-title">Отзывы</h2>
+
+  {
+    approvedTestimonials.length > 0 ? (
+      <div class="testimonials-list">
+        {approvedTestimonials.map((testimonial) => (
+          <article data-testimonial>
+            <blockquote>{testimonial.quote}</blockquote>
+            <p>{testimonial.attribution}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>{testimonialsEmptyState}</p>
+    )
+  }
+</section>

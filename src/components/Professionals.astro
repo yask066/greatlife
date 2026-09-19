@@ -1,0 +1,39 @@
+---
+import {
+  professionals,
+  professionalsEmptyState,
+} from '../content/trust';
+
+const approvedProfessionals = professionals.filter(
+  (professional) => professional.approval === 'approved' && professional.photoConsent,
+);
+---
+
+<section id="professionals" data-page-block="professionals" aria-labelledby="professionals-title">
+  <h2 id="professionals-title">Специалисты и квалификация</h2>
+
+  {
+    approvedProfessionals.length > 0 ? (
+      <div class="professionals-list">
+        {approvedProfessionals.map((professional) => (
+          <article data-professional-card>
+            <img
+              src={professional.photo.src}
+              alt={professional.photo.alt}
+              width={professional.photo.width}
+              height={professional.photo.height}
+            />
+            <h3>{professional.name}</h3>
+            <p>{professional.role}</p>
+            <p>{professional.qualification}</p>
+            <ul>
+              {professional.focus.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>{professionalsEmptyState}</p>
+    )
+  }
+</section>

@@ -12,6 +12,8 @@ import ContactSection from '../components/ContactSection.astro';
 import FinalCta from '../components/FinalCta.astro';
 import Footer from '../components/Footer.astro';
 import MobileContactBar from '../components/MobileContactBar.astro';
+import Professionals from '../components/Professionals.astro';
+import Testimonials from '../components/Testimonials.astro';
 ---
 
 <BaseLayout
@@ -29,15 +31,8 @@ import MobileContactBar from '../components/MobileContactBar.astro';
   <Audience />
   <MeetingFormat />
 
-  <section id="professionals" data-page-block="professionals" aria-labelledby="professionals-title">
-    <h2 id="professionals-title">Специалисты и квалификация</h2>
-    <p>Информация о специалистах готовится к публикации.</p>
-  </section>
-
-  <section id="testimonials" data-page-block="testimonials" aria-labelledby="testimonials-title">
-    <h2 id="testimonials-title">Отзывы</h2>
-    <p>Отзывы готовятся к публикации после согласования.</p>
-  </section>
+  <Professionals />
+  <Testimonials />
 
   <Faq />
 
