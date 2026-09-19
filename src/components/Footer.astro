@@ -1,0 +1,33 @@
+---
+import { contacts } from '../content/contacts';
+
+const navigationLinks = [
+  { label: 'Направления', href: '#directions' },
+  { label: 'О центре', href: '#about' },
+  { label: 'Вопросы', href: '#faq' },
+  { label: 'Контакты', href: '#contacts' },
+] as const;
+---
+
+<footer data-page-block="footer" aria-label="Подвал">
+  <p>Прекрасная жизнь</p>
+  <nav aria-label="Навигация в подвале">
+    <ul>
+      {navigationLinks.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+    </ul>
+  </nav>
+  <p>
+    <a id="contact-phone-footer" data-contact-kind="phone" href={contacts.phoneHref}>
+      {contacts.phoneDisplay}
+    </a>
+  </p>
+  <p>
+    <a
+      id="contact-telegram-footer"
+      data-contact-kind="telegram"
+      href={contacts.telegramHref}
+      target="_blank"
+      rel="noopener noreferrer"
+    >Написать в Telegram</a>
+  </p>
+</footer>

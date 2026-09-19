@@ -8,6 +8,10 @@ import Faq from '../components/Faq.astro';
 import Hero from '../components/Hero.astro';
 import MeetingFormat from '../components/MeetingFormat.astro';
 import Header from '../components/Header.astro';
+import ContactSection from '../components/ContactSection.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Footer from '../components/Footer.astro';
+import MobileContactBar from '../components/MobileContactBar.astro';
 ---
 
 <BaseLayout
@@ -37,17 +41,8 @@ import Header from '../components/Header.astro';
 
   <Faq />
 
-  <section id="contacts" data-page-block="contacts" aria-labelledby="contacts-title">
-    <h2 id="contacts-title">Контакты</h2>
-    <p>Контактная информация будет добавлена в этот раздел.</p>
-  </section>
-
-  <section data-page-block="final-cta" aria-labelledby="final-cta-title">
-    <h2 id="final-cta-title">Записаться на встречу</h2>
-    <p>Свяжитесь с центром, чтобы обсудить подходящее направление.</p>
-  </section>
-
-  <footer data-page-block="footer" aria-label="Подвал">
-    <p>Прекрасная жизнь</p>
-  </footer>
+  <ContactSection />
+  <FinalCta />
+  <Footer />
+  <MobileContactBar />
 </BaseLayout>

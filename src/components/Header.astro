@@ -1,5 +1,5 @@
 ---
-import { contacts } from '../content/contacts';
+import ContactActions from './ContactActions.astro';
 
 const navigationLinks = [
   { label: 'Направления', href: '#directions' },
@@ -40,7 +40,7 @@ const navigationLinks = [
       </ul>
     </nav>
 
-    <a class="button site-header__contact" href={contacts.phoneHref}>Связаться</a>
+    <ContactActions placement="header" />
   </div>
 </header>
 
@@ -98,8 +98,13 @@ const navigationLinks = [
     text-underline-offset: 0.2em;
   }
 
-  .site-header__contact {
+  .site-header :global(.contact-actions) {
     flex: 0 0 auto;
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .site-header :global(.button) {
     padding-inline: var(--space-3);
     border-radius: var(--radius-pill);
     background: var(--color-primary);
@@ -151,7 +156,7 @@ const navigationLinks = [
       border-block-start: 1px solid var(--color-sage);
     }
 
-    .site-header__contact {
+    .site-header :global(.contact-actions) {
       display: none;
     }
   }

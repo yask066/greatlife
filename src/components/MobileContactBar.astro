@@ -1,0 +1,29 @@
+---
+import ContactActions from './ContactActions.astro';
+---
+
+<aside class="mobile-contact-bar" data-page-block="mobile-contact-bar" aria-label="Быстрый контакт">
+  <ContactActions placement="mobile" />
+</aside>
+
+<style>
+  .mobile-contact-bar {
+    display: none;
+  }
+
+  @media (max-width: 47.999rem) {
+    .mobile-contact-bar {
+      display: block;
+    }
+
+    .mobile-contact-bar :global(.contact-actions) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .mobile-contact-bar :global(.button) {
+      flex: 1 1 12rem;
+    }
+  }
+</style>
