@@ -28,4 +28,44 @@ test.describe('consistent contact actions', () => {
       await expect(page.locator(`#contact-telegram-${placement}`)).toBeVisible();
     }
   });
+
+  test('keeps the mobile contact bar visible only on mobile without covering page content', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.locator('[data-page-block="mobile-contact-bar"]')).toBeHidden();
+
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.reload();
+
+    const mobileLayout = await page.locator('[data-page-block="mobile-contact-bar"]').evaluate((bar) => {
+      const rootStyles = getComputedStyle(document.documentElement);
+      const bodyStyles = getComputedStyle(document.body);
+      const barStyles = getComputedStyle(bar);
+      const styleText = [...document.styleSheets]
+        .flatMap((sheet) => {
+          try {
+            return [...(sheet.cssRules ?? [])].map((rule) => rule.cssText);
+          } catch {
+            return [];
+          }
+        })
+        .join('\n');
+
+      return {
+        barDisplay: barStyles.display,
+        barPosition: barStyles.position,
+        barHeight: rootStyles.getPropertyValue('--mobile-contact-bar-height').trim(),
+        bodyPaddingBottom: bodyStyles.paddingBottom,
+        hasSafeAreaInset: styleText.includes('env(safe-area-inset-bottom)'),
+      };
+    });
+
+    expect(mobileLayout).toMatchObject({
+      barDisplay: 'block',
+      barPosition: 'fixed',
+      barHeight: '5rem',
+      hasSafeAreaInset: true,
+    });
+    expect(Number.parseFloat(mobileLayout.bodyPaddingBottom)).toBeGreaterThanOrEqual(80);
+  });
 });

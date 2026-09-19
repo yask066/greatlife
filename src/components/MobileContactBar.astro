@@ -7,11 +7,33 @@ import ContactActions from './ContactActions.astro';
 </aside>
 
 <style>
+  :global(:root) {
+    --mobile-contact-bar-height: 0rem;
+  }
+
   .mobile-contact-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 20;
     display: none;
+    min-block-size: var(--mobile-contact-bar-height);
+    padding: var(--space-2) var(--container-gutter)
+      calc(var(--space-2) + env(safe-area-inset-bottom));
+    border-block-start: 1px solid var(--color-sage);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-elevated);
   }
 
   @media (max-width: 47.999rem) {
+    :global(:root) {
+      --mobile-contact-bar-height: 5rem;
+    }
+
+    :global(body) {
+      padding-bottom: calc(var(--mobile-contact-bar-height) + env(safe-area-inset-bottom));
+    }
+
     .mobile-contact-bar {
       display: block;
     }
