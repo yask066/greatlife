@@ -9,14 +9,14 @@ const approvedTestimonials = testimonials.filter(
 );
 ---
 
-<section id="testimonials" class="section container" data-page-block="testimonials" aria-labelledby="testimonials-title">
+<section id="testimonials" class="section section--sage container" data-page-block="testimonials" aria-labelledby="testimonials-title">
   <h2 id="testimonials-title">Отзывы</h2>
 
   {
     approvedTestimonials.length > 0 ? (
       <div class="testimonials-list card-grid">
         {approvedTestimonials.map((testimonial) => (
-          <article data-testimonial>
+          <article class="card" data-testimonial>
             <blockquote>{testimonial.quote}</blockquote>
             <p>{testimonial.attribution}</p>
           </article>

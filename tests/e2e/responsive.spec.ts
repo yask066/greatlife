@@ -124,3 +124,52 @@ test.describe('mobile-first grid contract', () => {
     });
   }
 });
+
+test.describe('visual token contract', () => {
+  test('uses the PRD visual treatment for actions, cards, sections and active tabs', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.goto('/');
+
+    const visualContract = await page.evaluate(() => {
+      const primary = document.querySelector<HTMLElement>('.button--primary');
+      const secondary = document.querySelector<HTMLElement>('.button--secondary');
+      const card = document.querySelector<HTMLElement>('.card');
+      const section = document.querySelector<HTMLElement>('.section--sage');
+      const activeTab = document.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
+
+      if (!primary || !secondary || !card || !section || !activeTab) {
+        return null;
+      }
+
+      const styles = (element: HTMLElement) => {
+        const computed = getComputedStyle(element);
+        return {
+          backgroundColor: computed.backgroundColor,
+          color: computed.color,
+          borderRadius: computed.borderRadius,
+          boxShadow: computed.boxShadow,
+        };
+      };
+
+      return {
+        primary: styles(primary),
+        secondary: styles(secondary),
+        card: styles(card),
+        section: styles(section),
+        activeTab: styles(activeTab),
+        activeMarker: activeTab.querySelector('[data-tab-state="active"]')?.textContent,
+      };
+    });
+
+    expect(visualContract).not.toBeNull();
+    expect(visualContract?.primary.backgroundColor).toBe('rgb(31, 92, 80)');
+    expect(visualContract?.primary.color).toBe('rgb(255, 255, 255)');
+    expect(visualContract?.secondary.color).toBe('rgb(31, 92, 80)');
+    expect(visualContract?.card.backgroundColor).toBe('rgb(255, 255, 255)');
+    expect(visualContract?.card.boxShadow).not.toBe('none');
+    expect(visualContract?.section.backgroundColor).toBe('rgb(220, 233, 228)');
+    expect(visualContract?.activeTab.backgroundColor).toBe('rgb(31, 92, 80)');
+    expect(visualContract?.activeTab.color).toBe('rgb(255, 255, 255)');
+    expect(visualContract?.activeMarker).toContain('выбрано');
+  });
+});

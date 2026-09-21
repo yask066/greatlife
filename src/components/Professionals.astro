@@ -9,14 +9,14 @@ const approvedProfessionals = professionals.filter(
 );
 ---
 
-<section id="professionals" class="section container" data-page-block="professionals" aria-labelledby="professionals-title">
+<section id="professionals" class="section section--sage container" data-page-block="professionals" aria-labelledby="professionals-title">
   <h2 id="professionals-title">Специалисты и квалификация</h2>
 
   {
     approvedProfessionals.length > 0 ? (
       <div class="professionals-list card-grid">
         {approvedProfessionals.map((professional) => (
-          <article data-professional-card>
+          <article class="card" data-professional-card>
             <img
               src={professional.photo.src}
               alt={professional.photo.alt}

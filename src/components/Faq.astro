@@ -12,7 +12,7 @@ import { faqItems } from '../content/faq';
         const answerId = `faq-answer-${item.id}`;
 
         return (
-          <article class="faq-item">
+          <article class="faq-item card">
             <h3>
               <button
                 type="button"
@@ -41,13 +41,6 @@ import { faqItems } from '../content/faq';
     .faq-list {
       display: grid;
       gap: var(--space-3);
-    }
-
-    .faq-item {
-      padding: var(--space-3);
-      background: var(--color-surface);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-card);
     }
 
     .faq-item h3 {

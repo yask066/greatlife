@@ -49,7 +49,7 @@ const defaultDirectionId = 'psychology';
           <ul class="card-grid">
             {direction.services.map((service) => (
               <li>
-                <article>
+                <article class="card">
                   <h4>{service.title}</h4>
                   <p>{service.description}</p>
                 </article>
@@ -68,15 +68,5 @@ const defaultDirectionId = 'psychology';
       display: none;
     }
 
-    .direction-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-    }
-
-    .direction-tabs button {
-      min-block-size: 2.75rem;
-      padding: 0.625rem 1rem;
-    }
   </style>
 </section>
