@@ -62,6 +62,38 @@ body {
   line-height: var(--line-height-body);
 }
 
+.container {
+  width: min(100% - (2 * var(--container-gutter)), var(--container-max));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.card-grid > * {
+  min-width: 0;
+}
+
+@media (min-width: 48rem) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+}
+
 img,
 picture,
 svg,

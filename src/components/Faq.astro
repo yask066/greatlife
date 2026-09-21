@@ -2,10 +2,10 @@
 import { faqItems } from '../content/faq';
 ---
 
-<section id="faq" data-page-block="faq" data-faq aria-labelledby="faq-title">
+<section id="faq" class="section container" data-page-block="faq" data-faq aria-labelledby="faq-title">
   <h2 id="faq-title">Частые вопросы</h2>
 
-  <div class="faq-list">
+  <div class="faq-list card-grid">
     {
       faqItems.map((item) => {
         const triggerId = `faq-trigger-${item.id}`;

@@ -69,3 +69,58 @@ test.describe('responsive layout at control widths', () => {
     });
   }
 });
+
+test.describe('mobile-first grid contract', () => {
+  for (const width of viewportWidths) {
+    test(`uses the planned grid density at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/');
+
+      const layout = await page.evaluate(() => ({
+        sections: document.querySelectorAll('.section').length,
+        containers: [...document.querySelectorAll<HTMLElement>('.container')].map((element) => {
+          const rect = element.getBoundingClientRect();
+          return { width: rect.width, left: rect.left, right: rect.right };
+        }),
+        grids: [...document.querySelectorAll<HTMLElement>('.card-grid')]
+          .map((grid) => {
+            const gridRect = grid.getBoundingClientRect();
+            if (gridRect.width === 0 || gridRect.height === 0) {
+              return null;
+            }
+
+            const leftEdges = [...grid.children]
+              .map((item) => Math.round(item.getBoundingClientRect().left));
+
+            return {
+              className: grid.className,
+              columns: new Set(leftEdges).size,
+              items: grid.children.length,
+            };
+          })
+          .filter((grid) => grid !== null)
+          .filter((grid) => grid.items > 1),
+      }));
+
+      expect(layout.sections, 'page sections should use the shared section class').toBeGreaterThan(0);
+      expect(layout.containers, 'page content should use the shared container class').not.toHaveLength(0);
+      expect(layout.grids, 'repeated content should use the shared card-grid class').not.toHaveLength(0);
+
+      for (const grid of layout.grids) {
+        if (width < 768) {
+          expect(grid.columns, `${grid.className} has unexpected density at ${width}px`).toBe(1);
+        } else {
+          expect(grid.columns).toBeGreaterThanOrEqual(2);
+        }
+      }
+
+      if (width >= 1440) {
+        for (const container of layout.containers) {
+          expect(container.width).toBeLessThanOrEqual(1200);
+          expect(container.left).toBeGreaterThanOrEqual(0);
+          expect(container.right).toBeLessThanOrEqual(width);
+        }
+      }
+    });
+  }
+});

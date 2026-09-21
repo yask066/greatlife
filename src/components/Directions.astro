@@ -5,7 +5,7 @@ import ContactActions from './ContactActions.astro';
 const defaultDirectionId = 'psychology';
 ---
 
-<section id="directions" data-page-block="directions" data-tabs aria-labelledby="directions-title">
+<section id="directions" class="section container" data-page-block="directions" data-tabs aria-labelledby="directions-title">
   <h2 id="directions-title">Направления и услуги</h2>
   <p>Выберите направление, чтобы увидеть доступные услуги.</p>
 
@@ -46,7 +46,7 @@ const defaultDirectionId = 'psychology';
           data-direction-panel={direction.id}
         >
           <h3>{direction.label}</h3>
-          <ul>
+          <ul class="card-grid">
             {direction.services.map((service) => (
               <li>
                 <article>
