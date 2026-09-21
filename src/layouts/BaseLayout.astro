@@ -70,7 +70,7 @@ const safeJsonLd = JSON.stringify(organization)
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <script type="application/ld+json" set:html={safeJsonLd}></script>
+    <script type="application/ld+json" is:inline set:html={safeJsonLd}></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
