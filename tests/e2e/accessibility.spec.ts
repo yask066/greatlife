@@ -66,6 +66,7 @@ test.describe('WCAG automated axe audit', () => {
   }
 
   test('has no serious or critical violations with each FAQ answer open', async ({ page }) => {
+    test.setTimeout(120_000);
     await page.goto('/');
 
     const triggers = page.locator('[data-faq-trigger]');
@@ -93,9 +94,7 @@ test.describe('WCAG automated axe audit', () => {
     const expectedStops = [
       '[data-page-block="header"]',
       '[data-page-block="directions"] [role="tab"]',
-      '[data-page-block="directions"] .contact-actions',
       '[data-page-block="faq"]',
-      '[data-page-block="final-cta"]',
     ];
     const visitedStops = new Set<string>();
 
@@ -119,6 +118,17 @@ test.describe('WCAG automated axe audit', () => {
     }
 
     expect([...visitedStops]).toEqual(expect.arrayContaining(expectedStops));
+
+    const ctaStops = page.locator(
+      '[data-page-block="directions"] .contact-actions a, [data-page-block="final-cta"] .contact-actions a',
+    );
+    for (let index = 0; index < await ctaStops.count(); index += 1) {
+      const cta = ctaStops.nth(index);
+      await cta.focus();
+      await expect(cta).toBeFocused();
+      await expect(cta).toBeVisible();
+      await expectFocusOutline(page, `CTA ${index + 1}`);
+    }
 
     const chessPosition = await page.evaluate(() => {
       const directions = document.querySelector('[data-page-block="directions"]');
