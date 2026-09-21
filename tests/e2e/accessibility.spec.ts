@@ -11,6 +11,14 @@ const expectAccessible = async (page: Page, state: string) => {
   expect(blockingViolations, `${state} has blocking accessibility violations`).toEqual([]);
 };
 
+const expectColorContrast = async (page: Page, state: string) => {
+  const results = await new AxeBuilder({ page })
+    .withRules(['color-contrast'])
+    .analyze();
+
+  expect(results.violations, `${state} has color contrast violations`).toEqual([]);
+};
+
 const expectFocusOutline = async (page: Page, label: string) => {
   const outline = await page.evaluate(() => {
     const element = document.activeElement;
@@ -33,6 +41,7 @@ test.describe('WCAG automated axe audit', () => {
     await page.goto('/');
 
     await expectAccessible(page, 'default page');
+    await expectColorContrast(page, 'default page');
   });
 
   test('has no serious or critical violations with the mobile menu open', async ({ page }) => {
@@ -42,6 +51,7 @@ test.describe('WCAG automated axe audit', () => {
     await page.getByRole('button', { name: 'Открыть меню' }).click();
     await expect(page.locator('#primary-navigation')).toBeVisible();
     await expectAccessible(page, 'mobile menu open');
+    await expectColorContrast(page, 'mobile menu open');
   });
 
   for (const direction of ['speech', 'psychology', 'bowls']) {
@@ -51,6 +61,7 @@ test.describe('WCAG automated axe audit', () => {
       await page.locator(`#tab-${direction}`).click();
       await expect(page.locator(`#panel-${direction}`)).toBeVisible();
       await expectAccessible(page, `${direction} direction`);
+      await expectColorContrast(page, `${direction} direction`);
     });
   }
 
@@ -65,6 +76,7 @@ test.describe('WCAG automated axe audit', () => {
       await trigger.click();
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
       await expectAccessible(page, `FAQ answer ${index + 1} open`);
+      await expectColorContrast(page, `FAQ answer ${index + 1} open`);
     }
   });
 
