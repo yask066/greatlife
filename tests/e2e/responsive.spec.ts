@@ -173,3 +173,43 @@ test.describe('visual token contract', () => {
     expect(visualContract?.activeMarker).toContain('выбрано');
   });
 });
+
+test.describe('content resilience and motion preferences', () => {
+  test('keeps a card inside the viewport when its heading is unusually long', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.goto('/');
+
+    const card = page.locator('.card').first();
+    await card.locator('h3, h4').first().evaluate((heading) => {
+      heading.textContent = 'Оченьдлинныйзаголовокбезпробеловдляпроверкипереноса'.repeat(8);
+    });
+
+    const geometry = await card.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        right: rect.right,
+        viewportWidth: window.innerWidth,
+        documentWidth: document.documentElement.scrollWidth,
+      };
+    });
+
+    expect(geometry.right).toBeLessThanOrEqual(geometry.viewportWidth);
+    expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth);
+  });
+
+  test('reduces optional transitions and animations when reduced motion is requested', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+
+    const durations = await page.locator('.button').first().evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        animation: Number.parseFloat(style.animationDuration),
+        transition: Number.parseFloat(style.transitionDuration),
+      };
+    });
+
+    expect(durations.animation).toBeLessThanOrEqual(0.01);
+    expect(durations.transition).toBeLessThanOrEqual(0.01);
+  });
+});
