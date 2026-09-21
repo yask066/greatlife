@@ -62,6 +62,12 @@ describe('production readiness gate', () => {
     ).toThrow(/testimonials.*authorConsent/);
   });
 
+  it('rejects missing approved trust material', () => {
+    expect(() =>
+      assertProductionReady({ ...approvedContent, testimonials: [] }),
+    ).toThrow(/testimonials/);
+  });
+
   it('accepts the approved content fixture', () => {
     expect(() => assertProductionReady(approvedContent)).not.toThrow();
   });

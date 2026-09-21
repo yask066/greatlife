@@ -29,6 +29,12 @@ export function assertProductionReady({
     );
   }
 
+  if (testimonials.length === 0) {
+    violations.push(
+      'src/content/trust.ts: testimonials must contain at least one approved item with authorConsent.',
+    );
+  }
+
   professionals.forEach((professional) => {
     const label = `professionals[${professional.id}]`;
 
