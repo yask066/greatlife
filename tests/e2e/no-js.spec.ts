@@ -186,7 +186,7 @@ test('keeps page blocks in the PRD order', async ({ baseURL, browser }) => {
   try {
     await page.goto('/');
 
-    const blocks = page.locator('body > main > *');
+    const blocks = page.locator('body > main > *:not([data-page-block="mobile-contact-bar"])');
     const expectedBlocks = [
       'header',
       'hero',

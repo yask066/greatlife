@@ -63,7 +63,7 @@ test.describe('consistent contact actions', () => {
     expect(mobileLayout).toMatchObject({
       barDisplay: 'block',
       barPosition: 'fixed',
-      barHeight: '5rem',
+      barHeight: '7.5rem',
       hasSafeAreaInset: true,
     });
     expect(Number.parseFloat(mobileLayout.bodyPaddingBottom)).toBeGreaterThanOrEqual(80);

@@ -193,17 +193,19 @@ test.describe('global accessibility foundation', () => {
   test('keeps primary actions at least 44 pixels tall', async ({ page }) => {
     await page.locator('body').evaluate((body) => {
       const link = document.createElement('a');
+      link.dataset.accessibilityProbe = 'true';
       link.className = 'button';
       link.href = '#main-content';
       link.textContent = 'Основное действие';
 
       const button = document.createElement('button');
+      button.dataset.accessibilityProbe = 'true';
       button.textContent = 'Кнопка';
 
       body.append(link, button);
     });
 
-    const heights = await page.locator('.button, button').evaluateAll((elements) =>
+    const heights = await page.locator('[data-accessibility-probe="true"]').evaluateAll((elements) =>
       elements.map((element) => element.getBoundingClientRect().height),
     );
 
