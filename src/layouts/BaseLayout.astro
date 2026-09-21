@@ -31,7 +31,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
-    <main id="main-content">
+    <main id="main-content" aria-label="Основное содержимое">
       <slot />
     </main>
     <script src="../scripts/main.ts"></script>

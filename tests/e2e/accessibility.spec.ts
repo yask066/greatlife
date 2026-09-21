@@ -123,4 +123,51 @@ test.describe('WCAG automated axe audit', () => {
 
     expect(chessPosition).toEqual({ chessAfterDirections: true, chessBeforeFaq: true });
   });
+
+  test('uses a complete heading hierarchy and named landmarks', async ({ page }) => {
+    await page.goto('/');
+
+    const semantics = await page.evaluate(() => {
+      const headings = [...document.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6')]
+        .map((heading) => Number(heading.tagName.slice(1)));
+      const headingIssues = headings.flatMap((level, index) => {
+        if (index === 0) return level === 1 ? [] : [`first heading is h${level}`];
+        return level > headings[index - 1] + 1
+          ? [`h${level} follows h${headings[index - 1]}`]
+          : [];
+      });
+
+      const landmarkSelectors = 'main, header, nav, aside, footer, section[aria-labelledby], [role="region"]';
+      const unnamedLandmarks = [...document.querySelectorAll<HTMLElement>(landmarkSelectors)]
+        .filter((landmark) => {
+          if (landmark.getAttribute('aria-label')?.trim()) return false;
+
+          const labelledBy = landmark.getAttribute('aria-labelledby');
+          return !labelledBy || !document.getElementById(labelledBy)?.textContent?.trim();
+        })
+        .map((landmark) => landmark.tagName.toLowerCase());
+
+      const imageIssues = [...document.images].flatMap((image) => {
+        const decorative = image.getAttribute('aria-hidden') === 'true' || image.getAttribute('role') === 'presentation';
+        const issues: string[] = [];
+
+        if (decorative && image.alt !== '') issues.push('decorative image must have empty alt');
+        if (!decorative && !image.alt.trim()) issues.push('content image must have non-empty alt');
+        if (image.width <= 0 || image.height <= 0) issues.push('image must have positive dimensions');
+        return issues;
+      });
+
+      return {
+        headingCount: headings.filter((level) => level === 1).length,
+        headingIssues,
+        unnamedLandmarks,
+        imageIssues,
+      };
+    });
+
+    expect(semantics.headingCount, 'page must have exactly one h1').toBe(1);
+    expect(semantics.headingIssues).toEqual([]);
+    expect(semantics.unnamedLandmarks).toEqual([]);
+    expect(semantics.imageIssues).toEqual([]);
+  });
 });
