@@ -9,8 +9,17 @@ import {
 import { approvedContent } from '../fixtures/approved-content';
 
 describe('trust content', () => {
-  it('keeps production trust collections empty until real content is approved', () => {
-    expect(professionals).toEqual([]);
+  it('keeps the temporary profile explicitly unapproved until real content is supplied', () => {
+    expect(professionals).toHaveLength(1);
+    expect(professionals[0]).toMatchObject({
+      id: 'temporary-professional-template',
+      name: 'Имя специалиста (шаблон)',
+      role: 'Должность / роль (шаблон)',
+      approval: 'demo',
+      photoConsent: true,
+    });
+    expect(professionals[0]?.qualification).toContain('будет добавлена');
+    expect(professionals[0]?.photo.src).toBe('/images/minipekka.jpg');
     expect(testimonials).toEqual([]);
     expect(professionalsEmptyState).toContain('готовятся к публикации');
     expect(testimonialsEmptyState).toContain('готовятся к публикации');

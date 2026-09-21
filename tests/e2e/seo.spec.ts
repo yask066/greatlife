@@ -3,8 +3,8 @@ import { expect, test } from '@playwright/test';
 const approvedTitle = 'Прекрасная жизнь — центр психологии и речи в Минске';
 const approvedDescription =
   'Очные психологические консультации, развитие речи, шахматные занятия для подростков и практики с поющими чашами в Минске';
-const approvedPhone = '+375 29 000-00-00';
-const approvedTelegram = 'https://t.me/prekrasnaya_zhizn_demo';
+const approvedPhone = '+375 (29) 123-45-67';
+const approvedTelegram = 'https://t.me/nickname';
 const metadataTimeout = 1_000;
 
 test.describe('SEO head and document semantics', () => {

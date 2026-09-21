@@ -7,6 +7,10 @@ import {
 const approvedProfessionals = professionals.filter(
   (professional) => professional.approval === 'approved' && professional.photoConsent,
 );
+
+const demoProfessionals = professionals.filter(
+  (professional) => professional.approval === 'demo',
+);
 ---
 
 <section id="professionals" class="section section--sage container" data-page-block="professionals" aria-labelledby="professionals-title">
@@ -17,6 +21,26 @@ const approvedProfessionals = professionals.filter(
       <div class="professionals-list card-grid">
         {approvedProfessionals.map((professional) => (
           <article class="card" data-professional-card>
+            <img
+              src={professional.photo.src}
+              alt={professional.photo.alt}
+              width={professional.photo.width}
+              height={professional.photo.height}
+            />
+            <h3>{professional.name}</h3>
+            <p>{professional.role}</p>
+            <p>{professional.qualification}</p>
+            <ul>
+              {professional.focus.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    ) : demoProfessionals.length > 0 ? (
+      <div class="professionals-list card-grid" data-demo-content>
+        {demoProfessionals.map((professional) => (
+          <article class="card" data-professional-card data-demo-profile>
+            <p>Временный шаблон — заменить перед публикацией</p>
             <img
               src={professional.photo.src}
               alt={professional.photo.alt}

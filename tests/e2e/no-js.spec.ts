@@ -225,7 +225,7 @@ test('keeps page blocks in the PRD order', async ({ baseURL, browser }) => {
   }
 });
 
-test('renders honest trust placeholders without invented publication data', async ({
+test('renders clearly labeled temporary trust templates before publication approval', async ({
   baseURL,
   browser,
 }) => {
@@ -238,13 +238,14 @@ test('renders honest trust placeholders without invented publication data', asyn
     const professionals = page.locator('#professionals');
     const testimonials = page.locator('#testimonials');
 
-    await expect(professionals).toContainText(
-      'Профили специалистов готовятся к публикации после согласования.',
-    );
+    await expect(professionals).toContainText('Временный шаблон — заменить перед публикацией');
+    await expect(professionals).toContainText('Имя специалиста (шаблон)');
+    await expect(professionals.locator('[data-demo-content]')).toHaveCount(1);
+    await expect(professionals.locator('[data-demo-profile]')).toHaveCount(1);
+    await expect(professionals.locator('img[src="/images/minipekka.jpg"]')).toHaveCount(1);
     await expect(testimonials).toContainText(
       'Отзывы готовятся к публикации после получения разрешений авторов.',
     );
-    await expect(professionals.locator('[data-professional-card]')).toHaveCount(0);
     await expect(testimonials.locator('blockquote, [data-testimonial]')).toHaveCount(0);
   } finally {
     await context.close();
