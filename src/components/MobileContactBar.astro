@@ -27,11 +27,13 @@ import ContactActions from './ContactActions.astro';
 
   @media (max-width: 47.999rem) {
     :global(:root) {
-      --mobile-contact-bar-height: 5rem;
+      --mobile-contact-bar-height: 7.5rem;
     }
 
     :global(body) {
-      padding-bottom: calc(var(--mobile-contact-bar-height) + env(safe-area-inset-bottom));
+      padding-bottom: calc(
+        var(--mobile-contact-bar-height) + var(--space-1) + env(safe-area-inset-bottom)
+      );
     }
 
     .mobile-contact-bar {

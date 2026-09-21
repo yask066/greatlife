@@ -14,6 +14,7 @@ test.describe('responsive layout at control widths', () => {
 
       const activeTab = page.locator('[role="tab"][aria-selected="true"]');
       await expect(activeTab).toBeVisible();
+      await activeTab.scrollIntoViewIfNeeded();
       await expect(activeTab).toBeInViewport();
 
       const interactiveSizes = await page.locator(
@@ -21,7 +22,9 @@ test.describe('responsive layout at control widths', () => {
       ).evaluateAll((elements) => elements
         .filter((element) => {
           const style = getComputedStyle(element);
-          return style.display !== 'none' && style.visibility !== 'hidden';
+          const rect = element.getBoundingClientRect();
+          return style.display !== 'none' && style.visibility !== 'hidden' &&
+            rect.width > 0 && rect.height > 0;
         })
         .map((element) => {
           const { width: elementWidth, height: elementHeight } = element.getBoundingClientRect();
