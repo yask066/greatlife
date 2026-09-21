@@ -3,6 +3,8 @@ import { expect, test } from '@playwright/test';
 const approvedTitle = 'Прекрасная жизнь — центр психологии и речи в Минске';
 const approvedDescription =
   'Очные психологические консультации, развитие речи, шахматные занятия для подростков и практики с поющими чашами в Минске';
+const approvedPhone = '+375 29 000-00-00';
+const approvedTelegram = 'https://t.me/prekrasnaya_zhizn_demo';
 const metadataTimeout = 1_000;
 
 test.describe('SEO head and document semantics', () => {
@@ -25,7 +27,7 @@ test.describe('SEO head and document semantics', () => {
       });
     await expect
       .soft(page.locator('link[rel="canonical"]'))
-      .toHaveAttribute('href', 'https://example.invalid/', {
+      .toHaveAttribute('href', `${process.env.SITE_URL ?? 'https://example.invalid'}/`, {
         timeout: metadataTimeout,
       });
     await expect
@@ -38,6 +40,49 @@ test.describe('SEO head and document semantics', () => {
       .toHaveAttribute('content', approvedDescription, {
         timeout: metadataTimeout,
       });
+  });
+
+  test('publishes crawlable SEO artifacts and production-safe organization JSON-LD', async ({
+    page,
+  }) => {
+    const [robotsResponse, sitemapResponse] = await Promise.all([
+      page.request.get('/robots.txt'),
+      page.request.get('/sitemap.xml'),
+    ]);
+
+    expect(robotsResponse.status()).toBe(200);
+    expect(sitemapResponse.status()).toBe(200);
+
+    const robots = await robotsResponse.text();
+    const sitemap = await sitemapResponse.text();
+    const configuredSiteUrl = process.env.SITE_URL ?? 'https://example.invalid';
+
+    expect(robots).toContain('User-agent: *');
+    expect(robots).toContain(`Sitemap: ${configuredSiteUrl}/sitemap.xml`);
+    expect(sitemap).toContain('<urlset');
+    expect(sitemap).toContain(`<loc>${configuredSiteUrl}/</loc>`);
+
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    expect(canonical).toBe(`${configuredSiteUrl}/`);
+    if (process.env.SITE_URL) {
+      expect(canonical).not.toContain('example.invalid');
+    }
+
+    const organization = await page.locator('script[type="application/ld+json"]').evaluateAll(
+      (scripts) =>
+        scripts
+          .map((script) => JSON.parse(script.textContent ?? '{}'))
+          .find((value) => value['@type'] === 'Organization'),
+    );
+
+    expect(organization).toMatchObject({
+      '@type': 'Organization',
+      name: approvedTitle,
+      url: `${configuredSiteUrl}/`,
+      telephone: approvedPhone,
+      address: { addressLocality: 'Минск' },
+      sameAs: [approvedTelegram],
+    });
   });
 
   test('exposes a focusable skip link to the main content', async ({ page }) => {
