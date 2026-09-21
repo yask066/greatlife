@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { contacts } from '../content/contacts';
+import { directions } from '../content/directions';
 
 interface Props {
   title: string;
@@ -13,6 +15,46 @@ const {
   canonicalPath = Astro.url.pathname,
 } = Astro.props;
 const canonicalUrl = new URL(canonicalPath, Astro.site);
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: title,
+  url: canonicalUrl,
+  telephone: contacts.phoneDisplay,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Минск',
+  },
+  sameAs: [contacts.telegramHref],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Направления',
+    itemListElement: directions.map((direction) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: direction.label,
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: direction.label,
+          itemListElement: direction.services.map((service) => ({
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: service.title,
+            },
+          })),
+        },
+      },
+    })),
+  },
+};
+const safeJsonLd = JSON.stringify(organization)
+  .replace(/</g, '\\u003C')
+  .replace(/>/g, '\\u003E')
+  .replace(/&/g, '\\u0026')
+  .replace(/\u2028/g, '\\u2028')
+  .replace(/\u2029/g, '\\u2029');
 ---
 
 <!doctype html>
@@ -28,6 +70,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="application/ld+json" set:html={safeJsonLd}></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Перейти к основному содержанию</a>
