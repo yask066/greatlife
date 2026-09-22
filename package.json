@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build && node scripts/verify-build.mjs dist",
-    "build:production": "node scripts/assert-production-ready.mjs && astro check && astro build && node scripts/verify-build.mjs dist",
+    "build:production": "node scripts/assert-editorial-approval.mjs && node scripts/assert-production-ready.mjs && astro check && astro build && node scripts/verify-build.mjs dist",
     "preview": "astro preview --host 127.0.0.1",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
