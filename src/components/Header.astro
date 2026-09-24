@@ -14,7 +14,13 @@ const navigationLinks = [
 <header class="site-header" data-page-block="header" data-mobile-menu aria-label="Шапка сайта">
   <div class="site-header__inner container">
     <a class="site-header__brand" href="/" aria-label="Прекрасная жизнь — на главную">
-      Прекрасная жизнь
+      <img
+        class="site-header__logo"
+        src="/images/logo-prekrasnaya-zhizn.png"
+        alt="Прекрасная жизнь"
+        width="1254"
+        height="1254"
+      />
     </a>
 
     <button
@@ -64,10 +70,16 @@ const navigationLinks = [
   }
 
   .site-header__brand {
+    display: block;
+    flex: 0 0 auto;
     color: var(--color-primary);
-    font-weight: 700;
     text-decoration: none;
-    white-space: nowrap;
+  }
+
+  .site-header__logo {
+    display: block;
+    width: clamp(8rem, 14vw, 11rem);
+    height: auto;
   }
 
   .site-header__navigation {
