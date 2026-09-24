@@ -11,6 +11,13 @@ test.describe('direction tabs', () => {
     await expect(page.locator('#panel-speech')).toBeHidden();
   });
 
+  test('shows service cards without list markers or default list padding', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.locator('#panel-psychology .card-grid')).toHaveCSS('list-style-type', 'none');
+    await expect(page.locator('#panel-psychology .card-grid')).toHaveCSS('padding-left', '0px');
+  });
+
   test('changes the active direction with a mouse click without reloading', async ({ page }) => {
     await page.goto('/');
     const speechTab = page.locator('#tab-speech');
