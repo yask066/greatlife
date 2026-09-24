@@ -14,6 +14,7 @@ describe('site header branding', () => {
     expect(source).toContain('<img');
     expect(source).toContain('src="/images/logo-prekrasnaya-zhizn.png"');
     expect(source).toContain('alt="Прекрасная жизнь"');
+    expect(source).toContain('width: clamp(6rem, 10.5vw, 8.25rem);');
     expect(source).not.toContain('>Прекрасная жизнь</a>');
   });
 });
