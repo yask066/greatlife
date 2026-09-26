@@ -22,6 +22,7 @@ const demoProfessionals = professionals.filter(
         {approvedProfessionals.map((professional) => (
           <article class="card" data-professional-card>
             <img
+              class="professional-photo"
               src={professional.photo.src}
               alt={professional.photo.alt}
               width={professional.photo.width}
@@ -42,6 +43,7 @@ const demoProfessionals = professionals.filter(
           <article class="card" data-professional-card data-demo-profile>
             <p>Временный шаблон — заменить перед публикацией</p>
             <img
+              class="professional-photo"
               src={professional.photo.src}
               alt={professional.photo.alt}
               width={professional.photo.width}

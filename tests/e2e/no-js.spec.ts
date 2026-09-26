@@ -242,7 +242,10 @@ test('renders clearly labeled temporary trust templates before publication appro
     await expect(professionals).toContainText('Имя специалиста (шаблон)');
     await expect(professionals.locator('[data-demo-content]')).toHaveCount(1);
     await expect(professionals.locator('[data-demo-profile]')).toHaveCount(1);
-    await expect(professionals.locator('img[src="/images/minipekka.jpg"]')).toHaveCount(1);
+    const professionalPhoto = professionals.locator('img[src="/images/minipekka.jpg"]');
+    await expect(professionalPhoto).toHaveCount(1);
+    await expect(professionalPhoto).toHaveCSS('width', '50px');
+    await expect(professionalPhoto).toHaveCSS('height', '50px');
     await expect(testimonials).toContainText(
       'Отзывы готовятся к публикации после получения разрешений авторов.',
     );
