@@ -172,6 +172,8 @@ test.describe('visual token contract', () => {
           color: computed.color,
           borderRadius: computed.borderRadius,
           boxShadow: computed.boxShadow,
+          paddingInlineStart: computed.paddingInlineStart,
+          paddingInlineEnd: computed.paddingInlineEnd,
         };
       };
 
@@ -192,6 +194,8 @@ test.describe('visual token contract', () => {
     expect(visualContract?.card.backgroundColor).toBe('rgb(255, 255, 255)');
     expect(visualContract?.card.boxShadow).not.toBe('none');
     expect(visualContract?.section.backgroundColor).toBe('rgb(220, 233, 228)');
+    expect(visualContract?.section.paddingInlineStart).toBe('32px');
+    expect(visualContract?.section.paddingInlineEnd).toBe('32px');
     expect(visualContract?.activeTab.backgroundColor).toBe('rgb(31, 92, 80)');
     expect(visualContract?.activeTab.color).toBe('rgb(255, 255, 255)');
     expect(visualContract?.activeMarker).toContain('выбрано');

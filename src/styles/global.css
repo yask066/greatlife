@@ -73,6 +73,7 @@ body {
 
 .section--sage {
   background: var(--color-sage);
+  padding-inline: var(--container-gutter);
 }
 
 .card {
