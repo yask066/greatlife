@@ -3,6 +3,27 @@ import { expect, test } from '@playwright/test';
 const viewportWidths = [320, 360, 768, 1024, 1440];
 
 test.describe('responsive layout at control widths', () => {
+  test('aligns the services summary with the detailed chess program', async ({ page }) => {
+    await page.goto('/');
+
+    const leftEdges = await page.evaluate(() => {
+      const services = document.querySelector<HTMLElement>('[data-page-block="services"]');
+      const chessProgram = document.querySelector<HTMLElement>('[data-page-block="chess-program"]');
+
+      if (!services || !chessProgram) {
+        return null;
+      }
+
+      return {
+        services: services.getBoundingClientRect().left,
+        chessProgram: chessProgram.getBoundingClientRect().left,
+      };
+    });
+
+    expect(leftEdges).not.toBeNull();
+    expect(leftEdges?.services).toBe(leftEdges?.chessProgram);
+  });
+
   for (const width of viewportWidths) {
     test(`keeps the ${width}px layout inside the viewport`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
